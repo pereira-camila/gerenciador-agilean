@@ -1,0 +1,18 @@
+export const activityTable = {
+  table: "table",
+  tableHeaders: "table thead th",
+  tableRows: '[data-cy^="linha-atividade-"]',
+  actionsButton: 'button[data-cy="atividade-0-btn-menu"]',
+  editButton: 'button[data-cy="atividade-0-btn-editar"]',
+  deleteButton: 'button[data-cy="atividade-0-btn-excluir"]',
+  duplicateButton: 'button[data-cy="atividade-0-btn-duplicar"]',
+  statusSelect: 'select[data-cy="status-dropdown-0"]',
+  rejectionReasonModal: '[data-cy="modal-rejeicao"]',
+  rejectionReasonInput: 'textarea[data-cy="modal-rejeicao-motivo"]',
+  rejectionReasonRequiredAlert: 'p[data-cy="modal-rejeicao-erro"]',
+  confirmRejectButton: 'button[data-cy="modal-rejeicao-btn-confirmar"]',
+  cancelRejectButton: 'button[data-cy="modal-rejeicao-btn-cancelar"]',
+  pendingCard: '[data-cy="card-pendentes"]',
+  resolvedCard: '[data-cy="card-resolvidas"]',
+  chart: '[data-cy*="grafico"], [data-cy*="chart"], canvas, svg',
+};

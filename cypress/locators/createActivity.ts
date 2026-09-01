@@ -1,7 +1,22 @@
-export const createActivityModal = {
+export const createActivity = {
   createActivityButton: 'button[data-cy="btn-cadastrar-atividade"]',
+  statusSelect: 'select[data-cy="modal-atividade-status"]',
   activityNameInput: 'input[data-cy="modal-atividade-nome"]',
   responsibleSelect: 'select[data-cy="modal-atividade-responsavel"]',
+  responsibleAddButton:
+    'button[data-cy="modal-atividade-btn-novo-responsavel"]',
+  responsibleModal: 'div[data-cy="modal-responsavel"]',
+  responsibleNameInput: 'input[data-cy="modal-responsavel-nome"]',
+  responsibleEmailInput: 'input[data-cy="modal-responsavel-email"]',
+  responsiblePhoneInput: 'input[data-cy="modal-responsavel-telefone"]',
+  responsibleSaveButton: 'button[data-cy="modal-responsavel-btn-salvar"]',
+  responsibleNameRequiredAlert: 'p[data-cy="modal-responsavel-erro-nome"]',
+  responsibleEmailRequiredAlert: 'p[data-cy="modal-responsavel-erro-email"]',
+  responsiblePhoneRequiredAlert: 'p[data-cy="modal-responsavel-erro-telefone"]',
   deadlineInput: 'input[data-cy="modal-atividade-prazo"]',
   registerButton: 'button[data-cy="modal-atividade-btn-salvar"]',
+  activityRequiredAlert: 'p[data-cy="modal-atividade-erro-nome"]',
+  responsibleRequiredAlert: 'p[data-cy="modal-atividade-erro-responsavel"]',
+  deadlineRequiredAlert: 'p[data-cy="modal-atividade-erro-prazo"]',
+  prioritySelect: 'select[data-cy="modal-atividade-prioridade"]',
 };
