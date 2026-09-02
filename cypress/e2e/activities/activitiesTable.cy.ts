@@ -1,4 +1,6 @@
+import { createResponsibleData } from "../../factories/responsibleFactory";
 import { activityTable } from "../../locators/activityTable";
+import { cardsAndCharts } from "../../locators/cardsAndCharts";
 import { createActivity } from "../../locators/createActivity";
 
 describe("Tabela de Atividades e Alteração de Status", () => {
@@ -18,11 +20,14 @@ describe("Tabela de Atividades e Alteração de Status", () => {
   });
 
   it("CT-017 — Validar estrutura da tabela de atividades", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para validar estrutura da tabela",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
     cy.wait("@createActivityRequest")
@@ -47,11 +52,14 @@ describe("Tabela de Atividades e Alteração de Status", () => {
   });
 
   it("CT-018 — Alterar status de 'Não Iniciada' para 'Em Andamento'", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para validar status",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
     cy.wait("@createActivityRequest")
@@ -62,18 +70,20 @@ describe("Tabela de Atividades e Alteração de Status", () => {
       .find("option:selected")
       .should("contain.text", "Não Iniciada");
     cy.get(activityTable.statusSelect).select("Em Andamento");
-    cy.reload();
     cy.get(activityTable.statusSelect)
       .find("option:selected")
       .should("contain.text", "Em Andamento");
   });
 
   it("CT-019 — Alterar status de uma atividade para 'Resolvida'", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para validar status",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
     cy.wait("@createActivityRequest")
@@ -84,18 +94,20 @@ describe("Tabela de Atividades e Alteração de Status", () => {
       .find("option:selected")
       .should("contain.text", "Não Iniciada");
     cy.get(activityTable.statusSelect).select("Resolvida");
-    cy.reload();
     cy.get(activityTable.statusSelect)
       .find("option:selected")
       .should("contain.text", "Resolvida");
   });
 
   it("CT-020 — Selecionar o status 'Rejeitada'", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para validar status",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
 
@@ -112,18 +124,20 @@ describe("Tabela de Atividades e Alteração de Status", () => {
       "Motivo da rejeição para teste automatizado",
     );
     cy.get(activityTable.confirmRejectButton).click();
-    cy.reload();
     cy.get(activityTable.statusSelect)
       .find("option:selected")
       .should("contain.text", "Rejeitada");
   });
 
   it("CT-021 — Validar obrigatoriedade do motivo da rejeição", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para validar status",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
     cy.wait("@createActivityRequest")
@@ -142,21 +156,23 @@ describe("Tabela de Atividades e Alteração de Status", () => {
   });
 
   it("CT-022 — Validar atualização dos cards após alteração de status", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para validar atualização dos cards",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
     cy.wait("@createActivityRequest")
       .its("response.statusCode")
       .should("eq", 201);
 
-    cy.get(activityTable.pendingCard).should("have.text", "Pendentes1");
+    cy.get(cardsAndCharts.pendingCard).should("have.text", "Pendentes1");
     cy.get(activityTable.statusSelect).select("Resolvida");
-    cy.reload();
-    cy.get(activityTable.pendingCard).should("have.text", "Pendentes0");
-    cy.get(activityTable.resolvedCard).should("have.text", "Resolvidas1");
+    cy.get(cardsAndCharts.pendingCard).should("have.text", "Pendentes0");
+    cy.get(cardsAndCharts.resolvedCard).should("have.text", "Resolvidas1");
   });
 });

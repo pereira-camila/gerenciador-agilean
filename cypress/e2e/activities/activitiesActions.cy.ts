@@ -1,3 +1,4 @@
+import { createResponsibleData } from "../../factories/responsibleFactory";
 import { activityTable } from "../../locators/activityTable";
 import { createActivity } from "../../locators/createActivity";
 
@@ -16,11 +17,17 @@ describe("Menu de ações", () => {
   });
 
   it("CT-026 — Editar os dados de uma atividade", () => {
+    const responsible = createResponsibleData();
+    cy.createResponsible(responsible);
+
+    const newResponsible = createResponsibleData();
+    cy.createResponsible(newResponsible);
+
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Uma nova atividade de teste",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
 
@@ -32,7 +39,7 @@ describe("Menu de ações", () => {
     cy.get(createActivity.activityNameInput)
       .clear()
       .type("Atividade editada com sucesso");
-    cy.get(createActivity.responsibleSelect).select("Maria");
+    cy.get(createActivity.responsibleSelect).select(newResponsible.name);
     cy.get(createActivity.deadlineInput).clear().type("2027-04-20");
     cy.get(createActivity.statusSelect).select("Resolvida");
     cy.get(createActivity.registerButton).click();
@@ -41,7 +48,10 @@ describe("Menu de ações", () => {
       .should("eq", 204);
 
     cy.getCellByHeader(0, "#").should("contain.text", "1");
-    cy.getCellByHeader(0, "Responsável").should("contain.text", "Maria");
+    cy.getCellByHeader(0, "Responsável").should(
+      "contain.text",
+      newResponsible.name,
+    );
     cy.getCellByHeader(0, "Atividade").should(
       "contain.text",
       "Atividade editada com sucesso",
@@ -52,11 +62,14 @@ describe("Menu de ações", () => {
   });
 
   it("CT-027 — Duplicar uma atividade", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Em Andamento",
       priority: "Média",
       activity: "Atividade para duplicar",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-08-18",
     });
     cy.wait("@createActivityRequest")
@@ -71,7 +84,10 @@ describe("Menu de ações", () => {
       .should("eq", 201);
 
     cy.getCellByHeader(0, "#").should("contain.text", "1");
-    cy.getCellByHeader(0, "Responsável").should("contain.text", "João");
+    cy.getCellByHeader(0, "Responsável").should(
+      "contain.text",
+      responsible.name,
+    );
     cy.getCellByHeader(0, "Atividade").should(
       "contain.text",
       "Atividade para duplicar",
@@ -82,11 +98,14 @@ describe("Menu de ações", () => {
   });
 
   it("CT-029 — Excluir uma atividade", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Atividade para excluir",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-08-18",
     });
 

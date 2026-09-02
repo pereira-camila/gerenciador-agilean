@@ -3,14 +3,39 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const baseUrl = process.env.BASE_URL;
+const email = process.env.EMAIL;
+const password = process.env.PASSWORD;
+
+if (!baseUrl || !email || !password) {
+  throw new Error(
+    "As variáveis BASE_URL, EMAIL e PASSWORD devem estar configuradas no arquivo .env.",
+  );
+}
+
 export default defineConfig({
+  reporter: "mochawesome",
+
+  reporterOptions: {
+    reportDir: "reports/json",
+    overwrite: false,
+    html: false,
+    json: true,
+  },
+
+  video: true,
+
+  videosFolder: "reports/videos",
+
+  screenshotsFolder: "reports/screenshots",
+
   env: {
-    email: process.env.EMAIL,
-    password: process.env.PASSWORD,
+    email,
+    password,
   },
 
   e2e: {
-    baseUrl: "https://cadastro-atividades-qa-teste.vercel.app",
+    baseUrl,
     viewportWidth: 1920,
     viewportHeight: 1080,
 

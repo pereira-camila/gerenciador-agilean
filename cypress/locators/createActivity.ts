@@ -1,5 +1,6 @@
 export const createActivity = {
   createActivityButton: 'button[data-cy="btn-cadastrar-atividade"]',
+  cancelActivityButton: '[data-cy="modal-atividade-btn-cancelar"]',
   statusSelect: 'select[data-cy="modal-atividade-status"]',
   activityNameInput: 'input[data-cy="modal-atividade-nome"]',
   responsibleSelect: 'select[data-cy="modal-atividade-responsavel"]',

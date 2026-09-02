@@ -19,9 +19,13 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.createActivityButton).click();
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleNameInput).type(responsibleName);
-    cy.get(createActivity.responsibleEmailInput).type("automacao@teste.com");
-    cy.get(createActivity.responsiblePhoneInput).type("(85) 99999-9999");
+    cy.get(createActivity.responsibleNameInput).clear().type(responsibleName);
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("automacao@teste.com");
+    cy.get(createActivity.responsiblePhoneInput)
+      .clear()
+      .type("(85) 99999-9999");
     cy.get(createActivity.responsibleSaveButton).click();
 
     cy.wait("@createResponsibleRequest")
@@ -40,9 +44,13 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.createActivityButton).click();
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleNameInput).type(responsibleName);
-    cy.get(createActivity.responsibleEmailInput).type("automacao@teste.com");
-    cy.get(createActivity.responsiblePhoneInput).type("(85) 99999-9999");
+    cy.get(createActivity.responsibleNameInput).clear().type(responsibleName);
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("automacao@teste.com");
+    cy.get(createActivity.responsiblePhoneInput)
+      .clear()
+      .type("(85) 99999-9999");
     cy.get(createActivity.responsibleSaveButton).click();
 
     cy.get(createActivity.responsibleSelect)
@@ -54,8 +62,12 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.createActivityButton).click();
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleEmailInput).type("automacao@teste.com");
-    cy.get(createActivity.responsiblePhoneInput).type("(85) 99999-9999");
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("automacao@teste.com");
+    cy.get(createActivity.responsiblePhoneInput)
+      .clear()
+      .type("(85) 99999-9999");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsibleNameRequiredAlert).should("be.visible");
   });
@@ -68,6 +80,7 @@ describe("Cadastro de responsáveis", () => {
     const responsibleName = "A".repeat(51);
 
     cy.get(createActivity.responsibleNameInput)
+      .clear()
       .type(responsibleName)
       .invoke("val")
       .should("have.length", 50);
@@ -78,13 +91,19 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
 
-    cy.get(createActivity.responsibleEmailInput).type("Automação de teste");
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("Automação de teste");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsibleEmailRequiredAlert).should("be.visible");
-    cy.get(createActivity.responsibleEmailInput).type("automacaoteste.com");
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("automacaoteste.com");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsibleEmailRequiredAlert).should("be.visible");
-    cy.get(createActivity.responsibleEmailInput).type("automacao!teste.com");
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("automacao!teste.com");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsibleEmailRequiredAlert).should("be.visible");
   });
@@ -93,18 +112,22 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.createActivityButton).click();
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleNameInput).type("Teste");
-    cy.get(createActivity.responsiblePhoneInput).type("(85) 99999-9999");
+    cy.get(createActivity.responsibleNameInput).clear().type("Teste");
+    cy.get(createActivity.responsiblePhoneInput)
+      .clear()
+      .type("(85) 99999-9999");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsibleEmailRequiredAlert).should("be.visible");
   });
 
-  it.only("CT-016 — Validar obrigatoriedade do campo Telefone", () => {
+  it("CT-016 — Validar obrigatoriedade do campo Telefone", () => {
     cy.get(createActivity.createActivityButton).click();
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleNameInput).type("Teste");
-    cy.get(createActivity.responsibleEmailInput).type("automacao@teste.com");
+    cy.get(createActivity.responsibleNameInput).clear().type("Teste");
+    cy.get(createActivity.responsibleEmailInput)
+      .clear()
+      .type("automacao@teste.com");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsiblePhoneRequiredAlert).should("be.visible");
   });

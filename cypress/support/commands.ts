@@ -12,7 +12,11 @@ declare global {
       // Custom command to delete activities
       deleteAllActivities(): Cypress.Chainable<void>;
 
+      // Custom command to create activities
       createActivity(data: ActivityData): Cypress.Chainable<void>;
+
+      // Custom command to create responsible
+      createResponsible(responsible: ResponsibleData): Cypress.Chainable<void>;
 
       // Custom command to get a cell by header name
       getCellByHeader(
@@ -31,11 +35,19 @@ interface ActivityData {
   deadline: string;
 }
 
+interface ResponsibleData {
+  name: string;
+  email: string;
+  phone: string;
+}
+
 Cypress.Commands.add("login", () => {
   cy.intercept("POST", "/auth/v1/token?grant_type=password").as("loginRequest");
   cy.visit("/");
   cy.get(loginPage.emailInput).type(Cypress.env("email"));
-  cy.get(loginPage.passwordInput).type(Cypress.env("password"));
+  cy.get(loginPage.passwordInput).type(Cypress.env("password"), {
+    log: false,
+  });
   cy.get(loginPage.loginButton).click();
 
   cy.wait("@loginRequest").its("response.statusCode").should("eq", 200);
@@ -56,7 +68,7 @@ Cypress.Commands.add("getCellByHeader", (row: number, header: string) => {
 });
 
 Cypress.Commands.add("deleteAllActivities", () => {
-  cy.wait(2000); // Aguarda 500ms para garantir que a tabela seja carregada
+  cy.wait(2000);
   const deleteActivity = () => {
     cy.get("body").then(($body) => {
       const rows = $body.find(activityTable.tableRows);
@@ -93,6 +105,21 @@ Cypress.Commands.add("createActivity", (data: ActivityData) => {
   cy.get(createActivity.deadlineInput).type(data.deadline);
 
   cy.get(createActivity.registerButton).click();
+});
+
+Cypress.Commands.add("createResponsible", (responsible: ResponsibleData) => {
+  cy.get(createActivity.createActivityButton).click();
+  cy.get(createActivity.responsibleAddButton).click();
+
+  cy.get(createActivity.responsibleNameInput).clear().type(responsible.name);
+
+  cy.get(createActivity.responsibleEmailInput).clear().type(responsible.email);
+
+  cy.get(createActivity.responsiblePhoneInput).clear().type(responsible.phone);
+
+  cy.get(createActivity.responsibleSaveButton).click();
+
+  cy.get(createActivity.cancelActivityButton).click();
 });
 
 export {};

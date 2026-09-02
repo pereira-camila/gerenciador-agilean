@@ -4,16 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cypress open",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "start": "cypress open",
+  "clean:reports": "rimraf reports",
+  "cy:run": "cypress run",
+  "merge:reports": "mochawesome-merge \"reports/json/*.json\" -o reports/report.json",
+  "generate:report": "marge reports/report.json --reportDir reports/html --reportFilename index --reportTitle \"Relatório de Execução - Gerenciador de Atividades\" --reportPageTitle \"Gerenciador de Atividades - Automação de Testes\" --inline",
+  "test:run": "npm run clean:reports && npm run cy:run",
+  "report": "npm run merge:reports && npm run generate:report",
+  "prepare": "husky"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pereira-camila/gerenciador-agilean.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "bugs": {
     "url": "https://github.com/pereira-camila/gerenciador-agilean/issues"
@@ -23,6 +29,9 @@
     "@types/node": "^26.4.0",
     "cypress": "^15.21.1",
     "dotenv": "^17.4.2",
+    "mochawesome": "^8.0.1",
+    "mochawesome-merge": "^5.1.1",
+    "mochawesome-report-generator": "^6.3.2",
     "typescript": "^7.0.2"
   }
 }

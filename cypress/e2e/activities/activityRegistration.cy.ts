@@ -1,7 +1,8 @@
+import { createResponsibleData } from "../../factories/responsibleFactory";
 import { activityTable } from "../../locators/activityTable";
 import { createActivity } from "../../locators/createActivity";
 
-describe("Cadastro de responsáveis", () => {
+describe("Cadastro de atividades", () => {
   beforeEach(() => {
     cy.login();
     cy.intercept("POST", "/rest/v1/atividades?select=*").as(
@@ -15,11 +16,14 @@ describe("Cadastro de responsáveis", () => {
   });
 
   it("CT-001 — Cadastrar atividade com dados válidos", () => {
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
     cy.createActivity({
       status: "Não Iniciada",
       priority: "Média",
       activity: "Uma nova atividade de teste",
-      responsible: "João",
+      responsible: responsible.name,
       deadline: "2027-03-16",
     });
 
@@ -28,7 +32,10 @@ describe("Cadastro de responsáveis", () => {
       .should("eq", 201);
 
     cy.getCellByHeader(0, "#").should("contain.text", "1");
-    cy.getCellByHeader(0, "Responsável").should("contain.text", "João");
+    cy.getCellByHeader(0, "Responsável").should(
+      "contain.text",
+      responsible.name,
+    );
     cy.getCellByHeader(0, "Atividade").should(
       "contain.text",
       "Uma nova atividade de teste",
@@ -58,22 +65,10 @@ describe("Cadastro de responsáveis", () => {
   });
 
   it("CT-004 — Validar opções disponíveis no campo Status", () => {
+    const expectedStatus = ["Não Iniciada", "Em Andamento"];
+
     cy.get(createActivity.createActivityButton).click();
-    cy.get(createActivity.activityNameInput).type(
-      "Uma nova atividade de teste",
-    );
-    cy.get(createActivity.responsibleSelect).select("João");
-    cy.get(createActivity.deadlineInput).type("2027-03-16");
-    cy.get(createActivity.registerButton).click();
-
-    const expectedStatus = [
-      "Não Iniciada",
-      "Em Andamento",
-      "Resolvida",
-      "Rejeitada",
-    ];
-
-    cy.get(activityTable.statusSelect)
+    cy.get(createActivity.statusSelect)
       .find("option")
       .then(($options) => {
         const actualStatus = [...$options].map((option) =>
@@ -82,9 +77,6 @@ describe("Cadastro de responsáveis", () => {
 
         expect(actualStatus).to.deep.equal(expectedStatus);
       });
-
-    cy.get(activityTable.actionsButton).click();
-    cy.get(activityTable.deleteButton).click();
   });
 
   it("CT-005 — Validar opções disponíveis no campo Prioridade", () => {
