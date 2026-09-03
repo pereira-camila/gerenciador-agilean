@@ -73,9 +73,7 @@ describe("Gráficos de atividades", () => {
 
     cy.get(cardsAndCharts.charts)
       .find(".recharts-surface")
-      .trigger("mousemove", 900, 200, {
-        force: true,
-      });
+      .trigger("mousemove", 900, 200);
 
     cy.get(cardsAndCharts.chartHover)
       .should("be.visible")
@@ -102,7 +100,7 @@ describe("Gráficos de atividades", () => {
     cy.get(cardsAndCharts.charts)
       .find(cardsAndCharts.chartBar)
       .eq(1)
-      .trigger("mouseover", { force: true });
+      .trigger("mouseover");
 
     cy.get(cardsAndCharts.chartHover)
       .should("be.visible")

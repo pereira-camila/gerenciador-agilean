@@ -137,5 +137,3 @@ Cypress.Commands.add("waitForUi", () => {
   // Aguarda a estabilização da interface após operações assíncronas.
   cy.wait(2000);
 });
-
-export {};
