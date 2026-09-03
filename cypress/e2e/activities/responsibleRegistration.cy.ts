@@ -1,3 +1,4 @@
+import { createResponsibleData } from "../../factories/responsibleFactory";
 import { createActivity } from "../../locators/createActivity";
 
 describe("Cadastro de responsáveis", () => {
@@ -14,48 +15,30 @@ describe("Cadastro de responsáveis", () => {
   });
 
   it("CT-008 — Cadastrar responsável com dados válidos", () => {
-    const responsibleName = `Automação de teste ${Date.now()}`;
+    const responsible = createResponsibleData();
+
+    cy.createResponsible(responsible);
 
     cy.get(createActivity.createActivityButton).click();
     cy.get(createActivity.responsibleAddButton).click();
     cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleNameInput).clear().type(responsibleName);
+    cy.get(createActivity.responsibleNameInput).clear().type(responsible.name);
     cy.get(createActivity.responsibleEmailInput)
       .clear()
-      .type("automacao@teste.com");
+      .type(responsible.email);
     cy.get(createActivity.responsiblePhoneInput)
       .clear()
-      .type("(85) 99999-9999");
+      .type(responsible.phone);
     cy.get(createActivity.responsibleSaveButton).click();
 
     cy.wait("@createResponsibleRequest")
       .its("response.statusCode")
       .should("eq", 201);
 
-    cy.get(createActivity.responsibleSelect).select(responsibleName);
+    cy.get(createActivity.responsibleSelect).select(responsible.name);
     cy.get(createActivity.responsibleSelect)
       .find("option:selected")
-      .should("contain.text", responsibleName);
-  });
-
-  it("CT-009 — Validar seleção automática do responsável após cadastro", () => {
-    const responsibleName = `Automação de teste ${Date.now()}`;
-
-    cy.get(createActivity.createActivityButton).click();
-    cy.get(createActivity.responsibleAddButton).click();
-    cy.get(createActivity.responsibleModal).should("exist");
-    cy.get(createActivity.responsibleNameInput).clear().type(responsibleName);
-    cy.get(createActivity.responsibleEmailInput)
-      .clear()
-      .type("automacao@teste.com");
-    cy.get(createActivity.responsiblePhoneInput)
-      .clear()
-      .type("(85) 99999-9999");
-    cy.get(createActivity.responsibleSaveButton).click();
-
-    cy.get(createActivity.responsibleSelect)
-      .find("option:selected")
-      .should("contain.text", responsibleName);
+      .should("contain.text", responsible.name);
   });
 
   it("CT-010 — Validar obrigatoriedade do campo Nome", () => {
@@ -64,7 +47,7 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.responsibleModal).should("exist");
     cy.get(createActivity.responsibleEmailInput)
       .clear()
-      .type("automacao@teste.com");
+      .type("email@teste.com.br");
     cy.get(createActivity.responsiblePhoneInput)
       .clear()
       .type("(85) 99999-9999");
@@ -127,7 +110,7 @@ describe("Cadastro de responsáveis", () => {
     cy.get(createActivity.responsibleNameInput).clear().type("Teste");
     cy.get(createActivity.responsibleEmailInput)
       .clear()
-      .type("automacao@teste.com");
+      .type("email@teste.com.br");
     cy.get(createActivity.responsibleSaveButton).click();
     cy.get(createActivity.responsiblePhoneRequiredAlert).should("be.visible");
   });

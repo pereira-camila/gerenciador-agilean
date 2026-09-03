@@ -18,6 +18,9 @@ declare global {
       // Custom command to create responsible
       createResponsible(responsible: ResponsibleData): Cypress.Chainable<void>;
 
+      // Custom command to wait for UI to load
+      waitForUi(): Cypress.Chainable<void>;
+
       // Custom command to get a cell by header name
       getCellByHeader(
         row: number,
@@ -68,9 +71,13 @@ Cypress.Commands.add("getCellByHeader", (row: number, header: string) => {
 });
 
 Cypress.Commands.add("deleteAllActivities", () => {
-  cy.wait(2000);
+  cy.waitForUi();
   const deleteActivity = () => {
     cy.get("body").then(($body) => {
+      cy.intercept("DELETE", "/rest/v1/atividades?**").as(
+        "deleteActivityRequest",
+      );
+
       const rows = $body.find(activityTable.tableRows);
 
       if (rows.length === 0) {
@@ -81,8 +88,12 @@ Cypress.Commands.add("deleteAllActivities", () => {
 
       cy.get(activityTable.deleteButton).click();
 
+      cy.wait("@deleteActivityRequest")
+        .its("response.statusCode")
+        .should("eq", 204);
+
       cy.reload();
-      cy.wait(2000);
+      cy.waitForUi();
       // Verifica novamente se ainda existem registros
       deleteActivity();
     });
@@ -120,6 +131,11 @@ Cypress.Commands.add("createResponsible", (responsible: ResponsibleData) => {
   cy.get(createActivity.responsibleSaveButton).click();
 
   cy.get(createActivity.cancelActivityButton).click();
+});
+
+Cypress.Commands.add("waitForUi", () => {
+  // Aguarda a estabilização da interface após operações assíncronas.
+  cy.wait(2000);
 });
 
 export {};
